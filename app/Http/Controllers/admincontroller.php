@@ -60,4 +60,26 @@ class AdminController extends Controller
 
         return redirect()->back()->with('warning', 'Category Deleted Successfully');
     }
+
+    // edit category //
+
+    public function category_edit($id)
+    {
+        $category = Category::find($id); 
+
+        return view('admin.products.editcategory', compact('category'));
+
+}
+ // update category //
+
+    public function category_update($id, request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'required | min:8'
+        ]);
+         $category = Category::find($id);
+        $category->title = $request->title;
+        $category->save();
+        return redirect(route('admin.products.category'))->with('success', 'Category Updated Successfully');
+    }
 }

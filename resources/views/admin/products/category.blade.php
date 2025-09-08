@@ -123,7 +123,10 @@
                     onclick="return confirm('Are you sure you want to delete this category?')">
                     <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
                   </a>
-                  <button class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></button>
+                  <a href="{{ route('admin.products.editcategory.edit', $category->id) }}"
+                    onclick="return confirm('Are you sure you want to Update this category?')">
+                    <button class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></button>
+                  </a>
                 </td>
               </tr>
               @endforeach

@@ -83,5 +83,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/products/category', [AdminController::class, 'category'])->name('admin.products.category');
         Route::post('/products/save', [AdminController::class, 'category_save'])->name('admin.products.category.save');
         Route::get('products/{id}', [AdminController::class, 'category_delete'])->name('admin.products.category.delete');
+        Route::get('products/editcategory/{id}', [AdminController::class, 'category_edit'])->name('admin.products.editcategory.edit');
+        Route::post('products/editcategory/update/{id}', [AdminController::class, 'category_update'])->name('admin.products.editcategory.update');
     });
 });
