@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\pagescontroller;
 use App\Http\Controllers\admincontroller;
+use App\Http\Controllers\admin\productcontroller;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,9 +37,11 @@ Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
 
-Route::get('/products', function () {
-    return view('products');
-})->name('products');
+Route::get('/products', [PagesController::class, 'products'])->name('products');
+
+// Route::get('/products', function () {
+//     return view('products');
+// })->name('products');
 
 // // single product
 // Route::get('/product', function () {
@@ -47,10 +50,11 @@ Route::get('/products', function () {
 
 /// single product with id///
 
-Route::get('/product/{id}', function ($id) {
-    return view('product', compact('id'));  // Passing product id to blade
-})->name('product');
+// Route::get('/product/{id}', function ($id) {
+//     return view('product', compact('id'));  // Passing product id to blade
+// })->name('product');
 
+Route::get('/product/{id}', [PagesController::class, 'product'])->name('product');
 
 
 
@@ -76,8 +80,12 @@ Route::prefix('admin')->group(function () {
 
     // products routes //
 
-    Route::get('/products', [AdminController::class, 'products'])->name('admin.products');
-    Route::get('/products/create', [AdminController::class, 'create'])->name('admin.products.create');
+    Route::prefix('products')->group(function () {
+        Route::get('/products', [productController::class, 'products'])->name('admin.products');
+        Route::get('/create', [productController::class, 'create'])->name('admin.products.create');
+        Route::post('/save', [productController::class, 'save'])->name('admin.products.save');
+        Route::delete('/products/{id}', [productController::class, 'product_delete'])->name('admin.products.delete');
+    });
 
     Route::prefix('category')->group(function () {
         Route::get('/products/category', [AdminController::class, 'category'])->name('admin.products.category');

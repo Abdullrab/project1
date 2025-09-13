@@ -22,7 +22,8 @@ class AdminController extends Controller
 
     public function create()
     {
-        return view('admin.products.create');
+        $categories = category::all();
+        return view('admin.products.create', compact('categories'));
     }
 
     public function orders()
@@ -44,10 +45,18 @@ class AdminController extends Controller
     public function category_save(request $request)
     {
         $validated = $request->validate([
-            'title' => 'required | min:8'
+            'title' => 'required|min:8',
+            'slug'        => 'required|unique:categories,slug',
+            'description' => 'nullable|string|max:500',
+            'status'      => 'required|in:Active,Inactive',
+
+
         ]);
         $category = new category;
         $category->title = $request->title;
+        $category->slug        = $request->slug;
+        $category->description = $request->description;
+        $category->status      = $request->status;
         $category->save();
         return redirect()->back()->with('success', 'Category Added Successfully');
     }
@@ -65,21 +74,29 @@ class AdminController extends Controller
 
     public function category_edit($id)
     {
-        $category = Category::find($id); 
+        $category = Category::find($id);
 
         return view('admin.products.editcategory', compact('category'));
-
-}
- // update category //
-
-    public function category_update($id, request $request)
-    {
-        $validated = $request->validate([
-            'title' => 'required | min:8'
-        ]);
-         $category = Category::find($id);
-        $category->title = $request->title;
-        $category->save();
-        return redirect(route('admin.products.category'))->with('success', 'Category Updated Successfully');
     }
+    // update category //
+
+   public function category_update($id, Request $request)
+{
+    $validated = $request->validate([
+        'title'       => 'required|min:3|max:255',
+        'slug'        => 'required|unique:categories,slug,' . $id, 
+        'description' => 'nullable|string|max:500',
+        'status'      => 'required|in:Active,Inactive',
+    ]);
+
+    $category = Category::findOrFail($id);
+    $category->title       = $request->title;
+    $category->slug        = $request->slug;
+    $category->description = $request->description;
+    $category->status      = $request->status;
+    $category->save();
+
+    return redirect()->route('admin.products.category')->with('success', 'Category Updated Successfully');
+}
+
 }

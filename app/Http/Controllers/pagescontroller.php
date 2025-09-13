@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product; // add this at the very top of your controller
+
 use Illuminate\Http\Request;
 
 class PagesController extends Controller
@@ -30,9 +32,16 @@ class PagesController extends Controller
     }
 
     // All Products page
+
+    // public function products()
+    // {
+    //     return view('products'); // products listing
+    // }
+
     public function products()
     {
-        return view('products'); // products listing
+        $products = Product::all();   // fetch products from DB
+        return view('products', compact('products')); // pass to view
     }
 
     // Single Product page
